@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Randomizador de Criação de Deck</title>
+    <!-- CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
+          crossorigin="anonymous">
+    <!-- jQuery and JS bundle w/ Popper.js -->
+</head>
+<style>
+    body {
+        /*  background: url('https://wallpapercave.com/wp/wp2805854.jpg') no-repeat;*/
+        background-size: cover;
+    }
+
+    .col {
+        background: rgba(255, 255, 255, .6);
+    }
+
+    label {
+        padding: 3px;
+        font-weight: 700;
+        color: #333;
+    }
+
+    .text-muted {
+        color: #940000 !important;
+        text-decoration: italic;
+    }
+
+    h1 {
+        font-size: 2em;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    .devby {
+        font-size: 8px;
+        text-align: right;
+    }
+</style>
+<body>
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col col-lg-3">
+            <h1>Random Deck </h1>
+            <form>
+                <div class="form-group">
+                    <label for="coresMin">Número mínimo de cor(es)</label>
+                    <select class="form-control" id="coresMin">
+                        <option value="1">Uma</option>
+                        <option value="2">Duas</option>
+                        <option value="3">Três</option>
+                        <option value="4">Quatro</option>
+                    </select>
+                    <small id="emailHelp" class="form-text text-muted">Número mínimo de cores que o deck deve possuir.</small>
+                </div>
+                <div class="form-group">
+                    <label for="coresMax">Número máximo de cor(es)</label>
+                    <select class="form-control" id="coresMax">
+                        <option value="1">Uma</option>
+                        <option value="2">Duas</option>
+                        <option value="3">Três</option>
+                        <option value="4">Quatro</option>
+                        <option value="5">Todas</option>
+                    </select>
+                    <small id="emailHelp2" class="form-text text-muted">Número máximo de cores que o deck deve possuir.</small>
+                </div>
+                <div class="form-group">
+                    <label for="players">Número de jogadores</label>
+                    <select class="form-control" id="players">
+                        <option value="2">Dois</option>
+                        <option value="3">Três</option>
+                        <option value="4">Quatro</option>
+                        <option value="5">Cinco</option>
+                        <option value="6">Seis</option>
+                        <option value="6" disabled>Dúvido ter mais amigos que isso</option>
+                    </select>
+                    <small id="emailHelp2" class="form-text text-muted">Número máximo de cores que o deck deve possuir.</small>
+                </div>
+                <div class="form-group">
+                    <input type="checkbox" checked value="1" id="podeRepetir">
+                    <label for="podeRepetir">Combinação pode repetir?</label>
+                    <small id="emailHelp3" class="form-text text-muted">Na boa se precisar explicação para este recurso vá jogar Pokemon Go.</small>
+                </div>
+                <div class="form-group">
+                    <label for="formatos">Formatos</label>
+                    <select class="form-control" id="formatos" multiple row="5">
+                        <option value="0" selected>Vale tudo Gil? (só não vale dar o...)</option>
+                        <option value="1" selected>Pauper (só comum)</option>
+                        <option value="2" selected>Artisan (comum e incomum)</option>
+                        <option value="3" selected>Artisan Metido (só incomum)</option>
+                        <option value="4" selected>Rican (só raras)</option>
+                        <option value="5" selected>Filantrópico (raras pra baixo)</option>
+                        <option value="6" selected>Classe Alta (raras e mitico)</option>
+                        <option value="7" selected>Nata (só mitico)</option>
+
+                    </select>
+                    <small id="emailHelp4" class="form-text text-muted">Randomizar o formato do deck entre as opções selecionadas acima.</small>
+                </div>
+
+                <div class="form-group">
+                    <button type="button" id="btnGerar" class="btn btn-lg btn-success btn-block">GERAR</button>
+                </div>
+                <p class="devby">Desenvolvido por mim mesmo</p>
+        </div>
+    </div>
+</div>
+<script>var clicky_site_ids = clicky_site_ids || [];
+clicky_site_ids.push(100539959);</script>
+<script async src="//static.getclicky.com/js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+        crossorigin="anonymous"></script>
+
+
+<script>
+    function sleep(milliseconds) {
+        const date = Date.now();
+        let currentDate = null;
+        do {
+            currentDate = Date.now();
+        } while (currentDate - date < milliseconds);
+    }
+
+    $(function () {
+        var bg = ['https://wallpapercave.com/wp/wp2805854.jpg', 'https://wallpapercave.com/wp/wp2805834.jpg', 'https://wallpapercave.com/wp/wp2805813.jpg', 'https://wallpapercave.com/wp/wp2805805.jpg'];
+
+        $('body').css('background-image', 'url("' + bg[Math.floor((Math.random() * bg.length))] + '")');
+        $(document).on('click', '#btnGerar', function (e) {
+            e.preventDefault();
+
+            var min = $("#coresMin").val();
+            var max = $("#coresMax").val();
+            var jogadores = $("#players").val();
+            var formatos = $("#formatos option:selected").map(function () {
+                return this.value
+            }).get();
+            var repeat = $("#podeRepetir").is(":checked");
+            var mono = ["Branco", "Azul", "Verde", "Vermelho", "Preto"];
+            var duo = ["Selesnya (WG)", "Golgari (GB)", "Dimir (BU)", "Izzet (UR)", "Boros (RW)", "Simic (UG)", "Gruul (GR)", "Rakdos (BR)", "Orzhov (BW)", "Azorius (WU)"];
+            var trio = ["Bant (WGU)", "Esper (UWB)", "Grixis (BUR)", "Jund (RBG)", "Naya (GRW)", "Mardu (WBR)", "Temur (URG)", "Abzan (BGW)", "Jeskai (RWU)", "Sultai (GUB)"];
+            var tetra = ["Glint-eye (UBRG)", "Dune-Brood (BRGW)", "Ink-Treader (RGWU)", "Witch-Maw (GWUB)", "Yore-Tiller (WUBR)"];
+            var brasil = ['Whoo-Burg (WUBRG)'];
+            if (min <= max) {
+                if (max == 1 && !repeat && jogadores > 5) {
+                    clicky.log('#mtg/erro1', 'Burrice 1');
+                    alert("Ahhh não véio....desculpa....vou te redirecionar para um site de intelecto mais apropriado ao seu nível");
+                    window.location.replace('http://www.teletubbies.com/');
+                } else {
+                    if (min == 1) {
+                        var opcoesCores = mono;
+                    } else if (min == 2) {
+                        var opcoesCores = duo;
+                    } else if (min == 3) {
+                        var opcoesCores = trio;
+                    } else if (min == 4) {
+                        var opcoesCores = tetra;
+                    }
+                    if (max == 2) {
+                        opcoesCores = opcoesCores.concat(duo);
+                    } else if (max == 3) {
+                        opcoesCores = opcoesCores.concat(trio);
+                    } else if (max == 4) {
+                        opcoesCores = opcoesCores.concat(tetra);
+                    } else if (max == 5) {
+                        opcoesCores = opcoesCores.concat(brasil);
+                    }
+                    var result = '';
+                    for (i = 1; i <= jogadores; i++) {
+                        var arrayIndex = Math.floor((Math.random() * opcoesCores.length));
+                        result = result + "Jogador " + i + ": " + opcoesCores[arrayIndex];
+                        if (!repeat) {
+                            opcoesCores.splice(arrayIndex, 1);
+                        }
+                        if (i < jogadores) {
+                            result = result + "\n\n";
+                        }
+                        sleep(200);
+                    }
+
+                    result = result + "\n\nFormato: " + $('#formatos option[value="' + formatos[Math.floor((Math.random() * formatos.length))] + '"]').html();
+                    clicky.log('#mtg/gerar', 'Gerar Deck');
+                    alert(result);
+                }
+            } else {
+                clicky.log('#mtg/erro2', 'Burrice 2');
+                alert("Desculpe infelizmente você precisa de aula de lógica antes de jogar Magic. Por favor aprenda um pouco mais assim evitamos chorões, mimizeiros, pedidores de ban e toda esta subespécie burra!\n\nMas se mesmo assim quer insistir, me explica ai: Em sua imensa sabedoria, como monto um deck com o minimo de cores sendo: " + min + " e o maximo sendo " + max + "?\nSe ainda não entendeu, por favor corte os pulsos.");
+            }
+        });
+
+        // Function called if AdBlock is not detected
+        function adBlockNotDetected() {
+        return '';
+        }
+// Function called if AdBlock is detected
+        function adBlockDetected() {
+            alert('Bloqueador de conteúdo detectado (ADBLOCK DA VIDA), não tem adsense nem nada do tipo aqui (eu agaranthio) mas este bloqueador pode desativar as funcionalidades do randomizador. Se experimentar este problema saiba de quem é a culpa, dica não é das estrelas!');
+        }
+
+// We look at whether FuckAdBlock already exists.
+        if(typeof fuckAdBlock !== 'undefined' || typeof FuckAdBlock !== 'undefined') {
+            // If this is the case, it means that something tries to usurp are identity
+            // So, considering that it is a detection
+            adBlockDetected();
+        } else {
+            // Otherwise, you import the script FuckAdBlock
+            var importFAB = document.createElement('script');
+            importFAB.onload = function() {
+                // If all goes well, we configure FuckAdBlock
+                fuckAdBlock.onDetected(adBlockDetected)
+                fuckAdBlock.onNotDetected(adBlockNotDetected);
+            };
+            importFAB.onerror = function() {
+                // If the script does not load (blocked, integrity error, ...)
+                // Then a detection is triggered
+                adBlockDetected();
+            };
+            importFAB.integrity = 'sha256-xjwKUY/NgkPjZZBOtOxRYtK20GaqTwUCf7WYCJ1z69w=';
+            importFAB.crossOrigin = 'anonymous';
+            importFAB.src = 'https://cdnjs.cloudflare.com/ajax/libs/fuckadblock/3.2.1/fuckadblock.min.js';
+            document.head.appendChild(importFAB);
+        }
+    });
+</script>
+
+
+</body>
+</html>
